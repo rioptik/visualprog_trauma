@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This application calculates the probability of having visual loss after Ocular Trauma.</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #ffffff; /* White background */
+        }
+
+        #output-container {
+            border: 1px solid black;
+            padding: 20px;
+            margin: 20px auto 50px; /* adjust margin to add space at the bottom */
+            max-width: 400px; /* adjust this value to your preference */
+            border-radius: 10px; /* Rounded corners */
+            background-color: #f0f0f0; /* Light gray background */
+        }
+
+        #cc0Calculator label,
+        #cc0Calculator select,
+        #cc0Calculator input {
+            margin-bottom: 10px; /* Add space between input elements and button */
+        }
+
+        .subheading {
+            font-size: 14px; /* Decrease font size */
+            margin-bottom: 10px; /* Add space below subheading */
+        }
+
+        #credentials {
+            margin-top: 30px; /* Adjusted margin to add more space */
+            font-size: 12px; /* Decrease font size */
+            color: gray; /* Change color to gray */
+        }
+
+        #cc0ProbabilityContainer {
+            margin-top: 20px; /* Add margin to separate from the button */
+        }
+
+        #cc0ProbabilityBar {
+            height: 20px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .red-bar {
+            background-color: #ff0000; /* Red color */
+        }
+
+        .yellow-bar {
+            background-color: #ffff00; /* Yellow color */
+        }
+
+        .green-bar {
+            background-color: #00ff00; /* Green color */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="output-container">
+        <h1>VisiOut</h1>
+        <p class="subheading">This application calculates the probability of having visual loss after Ocular Trauma.</p>
+        <form id="cc0Calculator">
+            <label for="age">Age (in years): </label>
+            <input type="number" id="age" required><br>
+
+            <label for="comorbidity">Socioeconomic Status: </label>
+            <select id="comorbidity" required>
+                <option value="Good">Good</option>
+                <option value="Poor">Poor</option>
+            </select><br>
+
+            <label for="pci">Interval of Injury (Time from Injury to Presentation in Hospital): </label>
+            <select id="pci" required>
+                <option value="0">Less than 1 week </option>
+                <option value="1">More than 1 week </option>
+            </select><br>
+
+            <button type="button" onclick="calculateVisualPrognosis()">Calculate Probability</button><br>
+
+            <div id="cc0ProbabilityContainer">
+                <label for="visualOutcome">Visual Outcome: </label>
+                <output id="visualOutcome"></output><br>
+                <div id="cc0ProbabilityBar"></div>
+            </div>
+        </form>
+        
+        <div id="credentials">
+            &copy; Dr. Ria Utpal Majumder
+        </div>
+    </div>
+
+    <script>
+        function calculateVisualPrognosis() {
+            const age = parseFloat(document.getElementById('age').value);
+            const socioeconomicStatus = document.getElementById('comorbidity').value;
+            const pci = parseFloat(document.getElementById('pci').value);
+
+            let outcome = '';
+
+            if (pci === 1 && age > 30) {
+                outcome = 'Poor';
+            } else if (pci === 0) {
+                if (age < 30 && socioeconomicStatus === 'Good') {
+                    outcome = 'Fair';
+                } else {
+                    outcome = 'Moderate';
+                }
+            } else {
+                outcome = 'Moderate';
+            }
+
+            document.getElementById('visualOutcome').textContent = outcome;
+
+            // Change the background color of the bar based on the outcome
+            const cc0ProbabilityBar = document.getElementById('cc0ProbabilityBar');
+            cc0ProbabilityBar.className = ''; // Clear previous classes
+
+            if (outcome === 'Fair') {
+                cc0ProbabilityBar.classList.add('green-bar');
+            } else if (outcome === 'Moderate') {
+                cc0ProbabilityBar.classList.add('yellow-bar');
+            } else {
+                cc0ProbabilityBar.classList.add('red-bar');
+            }
+        }
+    </script>
+</body>
+
+</html>
